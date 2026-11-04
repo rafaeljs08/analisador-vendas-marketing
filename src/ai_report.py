@@ -87,7 +87,3 @@ alertas (list[string])
         raise
 
 
-
-
-print("API KEY:", os.getenv("OPENAI_API_KEY"))
-
