@@ -1,89 +1,79 @@
-# 📊 Analisador de Vendas com Sugestões de Marketing (Python + IA)
+# Analisador de Vendas com Sugestões de Marketing
 
+Aplicação em **Python + Streamlit** para pequenos varejos que já têm as vendas em planilha, mas não têm BI. Você envia um **CSV** e recebe indicadores, rankings e sugestões de marketing.
 
-Este projeto permite que pequenos varejos (mercado, loja de roupas etc.) enviem um CSV de vendas e recebam:
+---
 
-- KPIs (faturamento, ticket médio, etc.)
-- Ranking de produtos
-- Vendas por dia da semana
-- Sugestões automáticas (regras)
-- Relatório e copies prontos com IA (GPT)
+## O que a aplicação entrega
 
-📁 A empresa envia um CSV de vendas
-📊 O sistema analisa automaticamente
-💡 E entrega KPIs + insights estratégicos de marketing
+| Análise | Detalhe |
+|---------|---------|
+| **KPIs** | Faturamento total, itens vendidos, número de vendas, dias analisados, ticket médio e receita por item |
+| **Por marca** | Tabela completa, Top 5 marcas, gráfico de barras (faturamento) e de pizza (participação) |
+| **Produtos** | Top 10 por faturamento e os 10 de menor saída |
+| **Dia da semana** | Vendas por dia, para achar os melhores dias de campanha |
+| **Sugestões de marketing** | Recomendações geradas por regras a partir dos números acima |
 
+### Relatório com IA (opcional, ainda não ligado à interface)
 
-# 🎯 Objetivo
+O módulo `src/ai_report.py` monta um resumo dos dados e pede à API da OpenAI um relatório com resumo, ações recomendadas, copies prontas para Instagram/WhatsApp e alertas. Ele precisa da variável `OPENAI_API_KEY` em um arquivo `.env` na raiz. **A tela atual usa apenas as sugestões por regras**; a chamada à IA ainda não foi conectada ao app.
 
-- Criar uma ferramenta prática que:
-- Analisa faturamento total
-- Identifica produtos mais e menos vendidos
-- Calcula ticket médio
-- Mostra desempenho por marca
-- Analisa vendas por dia da semana
-- Gera sugestões estratégicas de marketing
+---
 
-Pensado especialmente para pequenos varejistas que não possuem BI estruturado, mas já possuem dados em planilha.
+## Formato do CSV
 
-#   ✅ KPIs Estratégicos 📊 Funcionalidades
+O arquivo precisa ter as colunas:
 
-- Faturamento total
-- Itens vendidos
-- Número de vendas
-- Dias analisados
-- Ticket médio
-- Receita por item
+| Coluna | Exemplo | Observação |
+|--------|---------|------------|
+| `data` | `2026-02-01` | Formato `AAAA-MM-DD` |
+| `produto` | `Camiseta` | |
+| `marca` | `Class` | Usada na análise por marca |
+| `quantidade` | `2` | |
+| `valor` | `300.00` | **Total da linha** (quantidade × preço) |
 
-#   🏷️ Análise por Marca
+Para gerar um arquivo de exemplo com 30 dias de vendas fictícias:
 
-- Quantidade total vendida por marca
-- Faturamento total por marca
-- Número de vendas por marca
-- Ranking das Top 5 marcas
-
-📈 Gráfico de barras — Faturamento por Marca
-🥧 Gráfico de pizza — Participação percentual no faturamento
-
-#   🏆 Produtos
-
-- Top produtos por faturamento
-- Produtos com menor saída
-
-#   📅 Vendas por Dia da Semana
-
-- Permite identificar:
-- Dia com maior faturamento
-- Padrões de comportamento do cliente
-- Oportunidades de campanhas específicas
-
-
-# 💡 Sugestões de Marketing
-
-- O sistema gera recomendações automáticas como:
-- Aproveitar o melhor dia da semana
-- Criar destaque para o produto campeão
-- Estratégias para produtos com baixa saída
-- Ideias de promoção e combos
-- Sugestão de rotina de postagens
-
-
-## ✅ Requisitos do CSV
-O arquivo deve conter as colunas:
-- `data` (ex: 2026-02-01)
-- `produto` (ex: Camisa)
-- `marca` (ex: Class)
-- `quantidade` (ex: 2)
-- `valor` (float) -> valor TOTAL da linha (quantidade * preço)
-
-## 🚀 Como rodar
-
-### 1) Criar ambiente e instalar dependências
 ```bash
-python -m venv .venv
-# Windows:
-.venv\Scripts\activate
-# Linux/Mac:
-# source .venv/bin/activate
+python gerar_csv.py        # cria vendas_marcas_exemplo.csv
+```
 
+---
+
+## Como executar
+
+```bash
+# 1. Crie e ative o ambiente virtual
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+
+# 2. Instale as dependências
 pip install -r requirements.txt
+
+# 3. Inicie o app
+streamlit run src/app.py
+```
+
+O navegador abre em `http://localhost:8501`. Envie o CSV pelo botão da página.
+
+---
+
+## Tecnologias
+
+Python · Streamlit · Pandas · Plotly · python-dotenv · OpenAI (módulo opcional)
+
+---
+
+## Estrutura
+
+```
+src/
+├── app.py              # Interface Streamlit
+├── data_loader.py      # Leitura e validação do CSV
+├── analytics.py        # KPIs, rankings, marcas e dia da semana
+├── insights.py         # Sugestões de marketing
+├── insights_rules.py   # Regras das sugestões
+├── ai_report.py        # Relatório com IA (opcional)
+└── formatting.py       # Formatação de valores em reais
+gerar_csv.py            # Gera um CSV de exemplo
+```
