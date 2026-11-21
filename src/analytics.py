@@ -23,12 +23,12 @@ def compute_kpis(df: pd.DataFrame) -> dict:
     valor_por_item = faturamento_total / itens_vendidos if itens_vendidos > 0 else 0.0
 
     return {
-        "Faturamento Total": faturamento_total,
-        "Itens Vendidos": itens_vendidos,
-        "Numero de Vendas": num_vendas,
-        "Dias Analisados": dias,
-        "Ticket Medio": ticket_medio,
-        "Valor por Item": valor_por_item,
+        "faturamento_total": faturamento_total,
+        "itens_vendidos": itens_vendidos,
+        "num_vendas": num_vendas,
+        "dias_analisados": dias,
+        "ticket_medio": ticket_medio,
+        "valor_por_item": valor_por_item,
     }
 
 
